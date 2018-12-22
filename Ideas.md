@@ -1,6 +1,17 @@
 # Ideas
 
-A list of Linux tools I would like to learn more about, and, little exemplar project I would like to do.
+A list of Linux tools I would like to learn more about, and, little exemplar projects I would like to do.
+
+---
+
+## N/W HowTo
+
+* Capture Ethernet Frame.
+* Capture ARP packet.
+* Capture TCP packet.
+* Capture HTTP request for `ping google`.
+* Find all devices on local network.
+
 
 ---
 
@@ -23,12 +34,11 @@ A list of Linux tools I would like to learn more about, and, little exemplar pro
 
 * __nmap tool__
 
-* __traceroute toold__
+* __traceroute tool__
 
 * __dig tool__
 
 * __ssh tunneling__
-
 
 ---
 
