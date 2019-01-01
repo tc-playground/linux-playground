@@ -3,25 +3,40 @@
 # Dummy Interfaces ============================================================
 #
 # Command functions to create upto 255 'dummy network interfaces'. Each command
-# takes an integer argument between 0-255 to denote the name and number of the 
+# takes an integer argument between 1-255 to denote the name and number of the 
 # dummy interface to manage. The IP addresses of the interface matches the 
-# the index.
+# the index. For example:
 #
+# ./dummy-interface.sh init
+# ./dummy-interface.sh create 42
+# ./dummy-interface.sh list
+# ./dummy-interface.sh show 42
+# ./dummy-interface.sh test 42
+# ./dummy-interface.sh delete 42
+# ./dummy-interface.sh destroy
+# 
+# The default names of the interfaces are 'dummy-<idx>' where 'idx' denotes the 
+# the index. The 'DUMIFACE_NAME' environment variable can be used to alter this 
+# default. It also namespace operations such as 'list'.
+#
+# The network is currently defined as: "10.0.0.<idx>/24"
+# 
+
 
 # Example underlying command flow =============================================
 #
 # sudo modprobe dummy numdummies=1 
 #
-# sudo ip link add dummy0 type dummy
-# sudo ip addr add 10.0.0.1/24 dev dummy0
-# sudo ip link set dummy0 up
+# sudo ip link add dummy1 type dummy
+# sudo ip addr add 10.0.0.1/24 dev dummy1
+# sudo ip link set dummy1 up
 #
-# ip addr show dummy0
+# ip addr show dummy1
 # ping -c 1 10.0.0.1
 #
-# sudo ip link set dummy0 down
-# sudo ip addr del 10.0.0.1/24 dev dummy0
-# sudo ip link del dummy0 
+# sudo ip link set dummy1 down
+# sudo ip addr del 10.0.0.1/24 dev dummy1
+# sudo ip link del dummy1
 #
 # sudo rmmod dummy
 # 
@@ -37,8 +52,7 @@
 # Kernel dummy network driver =================================================
 #
 
-[ -z "${DUMIFACE_NUM}" ] && export DUMIFACE_NUM="1"
-DUMIFACE="dummy"
+[ -z "${DUMIFACE_NUM}" ] && export DUMIFACE_NUM="0"
 
 # Initialise dummy network driver and create N dummy interfaces.
 # These will be named: {dummy0, dummy1, ... , dummyN}
@@ -63,18 +77,22 @@ function net::dummy-iface::destroy() {
 # * http://wiki.networksecuritytoolkit.org/index.php/Dummy_Interface
 #
 
+# Default name / namesapce
+[ -z "${DUMIFACE_NAME}" ] && export DUMIFACE_NAME="dummy"
+
+# Default network CIDR.
 DUMIFACE_ROOT_IP="10.0.0"
 DUMIFACE_IP_CIDR="24"
 
 # Create a dummy interface.
 function net::dummy-iface::list() {
-    ls -1 /sys/class/net/ | grep 'dummy'
+    ls -1 /sys/class/net/ | grep "${DUMIFACE_NAME}"
 }
 
 # Create a dummy interface.
 function net::dummy-iface::create() {
     # e.g. '0'
-    local iface_idx="${1:-0}"
+    local iface_idx="${1:-1}"
     # e.g. 'dummy0'
     local iface_name=$(net::dummy-iface::get-name ${iface_idx})
     # e.g. '10.0.0.1/24'
@@ -93,7 +111,7 @@ function net::dummy-iface::create() {
 # Delete a dummy interface.
 function net::dummy-iface::delete() {
     # e.g. '0'
-    local iface_idx="${1:-0}"
+    local iface_idx="${1:-1}"
     # e.g. 'dummy0'
     local iface_name=$(net::dummy-iface::get-name ${iface_idx})
     # e.g. '10.0.0.1/24'
@@ -110,24 +128,22 @@ function net::dummy-iface::delete() {
 }
 
 function net::dummy-iface::get-name() {
-    # The index/number of the dummy interface. e.g. '0, 1, 2, etc.'
-    local iface_idx="${1:-0}"
+    # The index/number of the dummy interface. e.g. '1, 2, etc.'
+    local iface_idx="${1:-1}"
     # e.g. 'dummy0'
-    echo "dummy${iface_idx}"
+    echo "${DUMIFACE_NAME}-${iface_idx}"
 }
 
 function net::dummy-iface::get-ip() {
-    # The index/number of the dummy interface. e.g. '0, 1, 2, etc.'
-    local iface_idx="${1:-0}"
-    # Assign each dummy device a subnet ip addr one above it's 'idx'.
-    local subnet_ip=$((iface_idx+1))
+    # The index/number of the dummy interface. e.g. '1, 2, etc.'
+    local iface_idx="${1:-1}"
     # e.g. idx = '0' -> '10.0.0.1'
-    echo "10.0.0.${subnet_ip}"
+    echo "10.0.0.${iface_idx}"
 }
 
 function net::dummy-iface::get-cidr() {
-    # The index/number of the dummy interface. e.g. '0, 1, 2, etc.'
-    local iface_idx="${1:-0}"
+    # The index/number of the dummy interface. e.g. '1, 2, etc.'
+    local iface_idx="${1:-1}"
     # e.g. '10.0.0.1'
     local iface_ip=$(net::dummy-iface::get-ip ${iface_idx})
     # Assume 3 byte subdomain. e.g. '10.0.0.1/24'
@@ -135,16 +151,16 @@ function net::dummy-iface::get-cidr() {
 }
 
 function net::dummy-iface::show() {
-    # The index/number of the dummy interface. e.g. '0, 1, 2, etc.'
-    local iface_idx="${1:-0}"
+    # The index/number of the dummy interface. e.g. '1, 2, etc.'
+    local iface_idx="${1:-1}"
     # Check dummy interface device.
     local iface_name=$(net::dummy-iface::get-name ${iface_idx})
     ip addr show "${iface_name}"
 }
 
 function net::dummy-iface::test() {
-    # The index/number of the dummy interface. e.g. '0, 1, 2, etc.'
-    local iface_idx="${1:-0}"
+    # The index/number of the dummy interface. e.g. '1, 2, etc.'
+    local iface_idx="${1:-1}"
     # Check dummy interface device.
     local iface_ip=$(net::dummy-iface::get-ip ${iface_idx})
     ping -c 1 -W 3 "${iface_ip}"
