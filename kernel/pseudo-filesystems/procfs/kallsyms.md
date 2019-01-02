@@ -4,11 +4,13 @@
 
 In programming language, a __symbol__ is either a __variable__ or a __function__. 
 
-It is a name representing an space in the memory, which stores data (variables, or instructions (function, for executing).
+It is a __name__ representing a __space in the memory__  that stores __data__ (variables), or __instructions__ (functions).
 
-A __global variable__ is defined outside of any function body. A __global function__ is declared without `inline` and `static`.
+A __global symbol__ is visible throughout the entire system.
 
-The are thousands f global symbols in the Linux kernel and these are listed listed in `/proc/kallsyms`.
+The are thousands of __global symbols__ in the Linux kernel and these are listed in `/proc/kallsyms`.
+
+
 
 ## Example
 
