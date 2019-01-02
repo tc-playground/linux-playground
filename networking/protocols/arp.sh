@@ -15,4 +15,12 @@ function net::arp::sniff-arp-packets {
 }
 
 function net::arp::get-cache() {
-    arp
+    ip -c neigh
+}
+
+# Main ========================================================================
+#
+
+if [ ! -z "$1" ]; then
+    net::arp::$*
+fi
