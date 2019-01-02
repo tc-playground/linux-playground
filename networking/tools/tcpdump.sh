@@ -113,6 +113,12 @@ function net::tcpdump::watch_protocol() {
     tcpdump "${protocol}"
 }
 
+# Main ========================================================================
+#
+
+if [ ! -z "$1" ]; then
+    net::tcpdump::$*
+fi
 
 
 
