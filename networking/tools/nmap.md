@@ -1,8 +1,5 @@
-# NMAP
-
-
-
----
+PARTIAL-STUB
+# nmap
 
 ## Example - Find all devices on local network.
 

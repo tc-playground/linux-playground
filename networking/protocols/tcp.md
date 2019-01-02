@@ -1,3 +1,4 @@
+PARTIAL-STUB
 # TCP (Transmission Control Protocol)
 
 ## Curl Google and analyse traffic with 'tcpdump'
