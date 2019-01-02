@@ -28,7 +28,7 @@ The Linux kernel extends it to non–process-related data.
 * `/proc/cmdline` - A _text file_ containing the `boot options` passed to the kernel.
 * `/proc/cpuinfo` - A _text file_ containing information about the CPU.
 * `/proc/crypto` - A _text file_ containing a list of available cryptographic modules.
-* `/proc/devices` - A _text file_ containing a list of `character devices` and `block devices` sorted by `device ID` and giving the `major part` of the `/dev` name too.
+* `/proc/devices` - A _text file_ containing a list of `character devices` and `block devices` sorted by `device ID` and giving the `major part` of the `/dev` name too. __NB__: The kernel will assign a major/minor number pair when it detects a hardware device while booting the system as defined by the _Linux Assigned Name and Number Authority_.
 * `/proc/diskstats` - A _text file_ containing giving some information (including device numbers) for each of the `logical disk devices`.
 * `/proc/filesystems` - A _text file_ containing a list of the `file systems` supported by the kernel at the time of listing.
 * `/proc/interrupts` - A _text file_ containing details about the `interrupts` in-relation to `physical/logical devices` using the system resources. See also, `/proc/iomem`, `/proc/imports` and the _directory_ `/proc/irq`.
