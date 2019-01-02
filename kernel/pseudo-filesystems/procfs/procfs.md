@@ -38,6 +38,7 @@ The Linux kernel extends it to non–process-related data.
 * `/proc/modules` - A _text file_ containing a list of the kernel modules currently loaded.
 * `/proc/mounts` - A _symlink_ to `self/mounts` which contains _text file_ a list of the currently `mounted devices` and their `mount options`.
 * `/proc/net/` - A _symlink_ to `self/net` which contains _directory_ containing useful information about the `network stack`. This contains LOTS of nw information, e.g. `arp table`, `route table`, `network stats1, etc, etc.
+    * `stat` - Various network statistics.
 * `/proc/partitions` - A _text file_ containing a list of the `device-numbers`, their size and `/dev names` which the kernel has identified as existing partitions.
 * `/proc/scsi` - A _directory_ containing information about any devices connected via a `SCSI` or `RAID` controller.
 * `/proc/self` - A symbolic link to the current (traversing) process at `/proc/self` (i.e. /proc/PID/ where PID is that of the current process).
