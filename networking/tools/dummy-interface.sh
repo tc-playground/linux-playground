@@ -169,6 +169,11 @@ function net::dummy-iface::test() {
 # Main ========================================================================
 #
 
+function net::bonded-iface::help() {
+    echo "Functions for managing 'dummy' ethernet interfaces."
+}
+
+
 if [ ! -z "$1" ]; then
     net::dummy-iface::$*
 fi

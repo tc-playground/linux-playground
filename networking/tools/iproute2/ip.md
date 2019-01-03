@@ -59,7 +59,9 @@ The `ip` command manipulates various types of _network object_ in the linux netw
 * [`ip` networking commands](https://www.zframez.com/tutorials/linux-networking-commands.html)
 * [HowTo - iproute2](http://www.policyrouting.org/iproute2.doc.html)
 
---- References
+--- 
+
+## References
 
 * [Manual](http://linux-ip.net/gl/ip-cref/ip-cref-node19.html)
 
