@@ -18,8 +18,14 @@
 
 ---
 
-## Reference
+## Tutorials
 
 [Tutorial 1](https://www.tecmint.com/configure-network-connections-using-nmcli-tool-in-linux/)
 [Tutorial 2](https://www.unixmen.com/basics-networkmanager-command-line-tool-nmcli/)
 [Examples](https://people.freedesktop.org/~lkundrak/nm-docs/nmcli-examples.html)
+
+---
+
+## References
+
+[Ubuntu docs](https://developer.gnome.org/NetworkManager/stable/nmcli.html)
