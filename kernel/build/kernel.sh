@@ -134,7 +134,6 @@ function kernel::unload() {
     unalias kernel
 }
 
-
 if [ ! -z "$1" ]; then
     kernel::$*
 fi
