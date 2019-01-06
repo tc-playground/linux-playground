@@ -4,7 +4,6 @@
 [ -z "${LIBVIRT_URL}" ] && export LIBVIRT_URL="qemu:///system"
 
 
-
 # Networking ==================================================================
 #
 # * https://libvirt.org/formatnetwork.html
@@ -108,6 +107,76 @@ EOF
     echo "Generated default network template: '${nw_spec}'"
 }
 
+# Show bridge info.
+#
+# virbr0 should have been assigned a valid ip (by dhcp via dnsmasq).
+#
+# e.g: 192.168.122.1/24
+#
+function virsh::network-bridge-info() {
+    local ame="${1:-${LIBVIRT_NETWORK_BRIDGE}}"
+    ip -c address show "${name}"
+    ip -c address show "${name}-nic"
+}
+
+# Check of dnsmasq is running. dnsmasq is started by libvirt.
+#
+# dnsmasq should be running on port 53 fo both udp and tcp. 
+#
+function virsh::dnsmasq-status-show() {
+    # Check dnsmasq is running.
+    ps uf -C dnsmasq
+    # sudo ss -nlptu | grep dnsmasq
+    sudo netstat -nlptu | grep dnsmasq
+}
+
+# Check ip tables.
+# 
+# |*| - Firewall rules 
+#
+# Should allow dnsmasq (53) and dhcp (67) traffic through.
+#
+# INPUT chain should: 
+#   ACCEPT input on virbr0 on udp/tcp port '53' (dnsmaq) and '67' (dhcp)
+#
+# Chain INPUT (policy ACCEPT 64834 packets, 18M bytes)
+#  pkts bytes target     prot opt in     out     source               destination         
+#     0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+#     0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+#     0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+#     0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+# 
+# |*| - Forwarding rules
+# 
+# Should allow all replies to come back in (packets belonging to RELATED and ESTABLISHED sessions), 
+# and allow communications from the virtual network to any other network, as long as the source ip is 
+# 192.168.122/24.
+#
+# FORWARD chain should:
+#   ACCEPT forwarding on virbr0 to/fomr subnet range 192.168.122.0/24.
+#   REJECT all other traffic.
+# 
+# Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+#  pkts bytes target     prot opt in     out     source               destination         
+#     0     0 ACCEPT     all  --  *      virbr0  0.0.0.0/0            192.168.122.0/24     ctstate RELATED,ESTABLISHED
+#     0     0 ACCEPT     all  --  virbr0 *       192.168.122.0/24     0.0.0.0/0           
+#     0     0 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0           
+#     0     0 REJECT     all  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+#     0     0 REJECT     all  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+# 
+function virsh::iptables-show() {
+    sudo iptables -nv
+}
+
+# Check ip tables - nat.
+function virsh::iptables-nat-show() {
+    sudo iptables -nvL -t nat
+}
+
+# Check ip forwarding.
+function virsh::ip_forward-show() {
+    cat /proc/sys/net/ipv4/ip_forward
+}
 
 # Network Bridge ==============================================================
 #
@@ -159,12 +228,6 @@ function virsh::network-bridge-iface-remove() {
     brctl delif "${brname} ${ifname}"
 }
 
-# Show bridge info.
-function virsh::network-bridge-info() {
-    local name="${1:-${LIBVIRT_NETWORK_BRIDGE}}"
-    ip address show "${name}"
-    ip address show "${name}-nic"
-}
 
 # Miscellaneous ===============================================================
 #

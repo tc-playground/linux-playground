@@ -4,6 +4,8 @@ STUB
 
 ## Introduction
 
+* `VLANs`are a bit like virtual switch. 
+
 * `VLANs` allow _multiple separate virtual networks_ to run on top of _single physical network_.
 
 * `VLANs` augment network packets by adding additional `tags`. These are used to select packets for additional L2 behaviour: routing, traffic control, etc.

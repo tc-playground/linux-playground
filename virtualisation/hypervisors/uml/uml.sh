@@ -2,7 +2,10 @@
 
 # References ==================================================================
 #
+# * http://user-mode-linux.sourceforge.net/
 # * https://opensourceforu.com/2016/11/discovering-versatility-user-mode-linux/
+# * http://fs.devloop.org.uk/
+
 # * https://www.cyberciti.biz/tips/compiling-linux-kernel-26.html
 
 
