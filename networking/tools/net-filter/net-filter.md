@@ -13,3 +13,4 @@
 ## Resources
 
 * [Home](https://netfilter.org/)
+* [Netfilter Extensions](https://www.netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO-3.html)

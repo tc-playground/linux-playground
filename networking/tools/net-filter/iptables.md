@@ -4,9 +4,13 @@
 
 * `iptables` and `ip6tables` are used to set up, maintain, and inspect the `tables` of IPv4 and IPv6 `packet filter rules` in the Linux kernel.
 
-* `iptables` can allow `firewalls` to be implement.
+* `iptables` can allow `firewalls` to be implemented.
 
-* `iptables` can allow `NATs` to be implement.
+* `iptables` can allow `NATs` to be implemented.
+
+* `iptables` can allow `rate limiting` to be implemented.
+
+* `iptables` can allow `user blocking` to be implemented.
 
 ---
 
@@ -14,95 +18,200 @@
 
 * All data is sent in the form packets over the internet. 
 
-* Linux kernel provides an interface (`netfilter`) to filter both __incoming__ and __outgoing__ __traffic packets__ using __tables__ of __packet filters__.
+* `iptables` is just a command-line interface to the packet filtering functionality in netfilter.
 
-* `iptables` manages _chains_ of _rules_ that govern _input_, _output_, and _routed_ traffic through the system. The _chains_ are grouped into _tables_ by purpose.
+* `iptables` is a stateful `firewall`.
 
-* _Tables_ - There are 5 defaults tables: `filter` (default), `nat`, `mangle`, `raw`, and, `security`.
+* `iptables` packet filtering is organized into three different kinds of structures: `tables`, `chains` and `targets`. 
 
-* _Chains_ - Contain set of rules that are applied to packets at certain points of the packet handling process:  `PREROUTING`, `INPUT`, `FORWARD`, `OUTPUT`, and `POSTROUTING`.
+    *  `tables` - Allow you to process packets in specific ways:
 
-* _Rules_ -  
+        * There are 5 defaults tables: `filter` (default), `nat`, `mangle`, `raw`, and, `security`.
 
-* _Rules Targets__ - `ACCEPT`, `DROP`, `QUEUE` or `RETURN`. NB: Extensions also exist. 
+        * Have one or more `chains` attached to them
 
-* `- For altering packets as soon as they come in. For altering incoming packets before routing. For packets arriving via any network interface.
-*  - FFor packets __coming into the box itself__. For packets __destined for local sockets__. 
-* - For packets __being routed through__ the box. For altering packets being routed through the box.
-* -  For packets __locally generated__ packets. For altering locally-generated packets before routing.
-* - For altering packets as they are about to go out.
----
+    * `chains` - Allow you to inspect and act on packets at various points during packet processing.
 
-## Firewall Rules and Targets
+        * A chain is a set of rules.
 
-* A `firewall rule` specifies criteria for a packet and a target. 
-* If the packet __does not match__, the next rule in the chain is the examined.
-* if the packet __does match__, then the next rule is specified by the value of the `target` which can be: 
-    * __the name of a user-defined chain__ - Examine the first rule at the start of this chain.
-    * __`ACCEPT`__ - Let the packet though.
-    * __`DROP`__ - Discard the packet.
-    * __`QUEUE`__ - Pass the packet to userspace (via `nfnetlink`/`ip_queue` `queue handler`). Packets with a target of QUEUE will be sent to queue number '0' in this case.
-    * __`RETURN`__ - Stop traversing this chain and resume at the next rule in the previous (calling) chain.
-*  If the end of a built-in chain is reached or a rule in a built-in chain with target RETURN is matched, the target specified by the chain policy determines the fate of the packet.
-* `iptables` can use extended packet matching and target modules. A list of these is available in the `iptables-extensions(8)` manpage.    
+        * When a packet arrives (or leaves, depending on the chain), `iptables` matches it against `rules` and takes the appropriate action.
 
----
+        * `rules` - Are defined with respect to packet criteria, and, have a `target` (action):
+        
+            * `criteria` - Includes: source/destination ip, source dstination port, protocol, input/ouput interfaces, etc.
 
-## Chains
+            * `connection state` - The history of the connection and who initiated it. 
 
-Several different `chain` types are defined. They denotes the semantic target of the rules applied.
-
-* `PREROUTING` - For altering packets as soon as they come in. For altering incoming packets before routing. For packets arriving via any network interface.
-* `INPUT` - FFor packets __coming into the box itself__. For packets __destined for local sockets__. 
-* `FORWARD` - For packets __being routed through__ the box. For altering packets being routed through the box.
-* `OUTPUT` -  For packets __locally generated__ packets. For altering locally-generated packets before routing.
-* `POSTROUTING` - For altering packets as they are about to go out.
+            * `actions` - Includes ACCEPT, DROP, QUEUE, RETURN, LOG, etc.
 
 ---
 
 ## Tables
 
-Several different `tables` are defined.  Each table contains a number of built-in chains and may also contain user-defined chains.
+`tables` allow you to do very specific things with packets. On a modern Linux distributions, there are four tables:
 
-* `filter` - This is the default table. It provides the following built-in chains: 
-    * `INPUT` - For packets __destined for local sockets__.
-    * `FORWARD` - For packets __being routed through__ the box. 
-    * `OUTPUT` -  For packets __locally generated__ packets.
+* `filter` - This is the default and perhaps the most widely used table. It is used to make decisions about whether a packet should be allowed to reach its destination.
 
-* `nat` -This table is consulted when a packet that creates a new connection is encountered. It provides the following built-in chains:  
-    * `PREROUTING` - For altering packets as soon as they come in.
-    * `OUTPUT` - For altering locally-generated packets before routing.
-    * `POSTROUTING` - For altering packets as they are about to go out.
+* `mangle` - This table allows you to alter packet headers in various ways, such as changing TTL values.
 
-* `mangle` - This table is used for specialized packet alteration. Until kernel 2.4.17 it had two built-in chains: 
-    * `PREROUTING` - For altering incoming packets before routing.
-    * `OUTPUT` - For altering locally-generated packets before routing. 
-    * `INPUT` - For packets coming into the box itself. (kernel >= 2.4.18).
-    * `FORWARD` - For altering packets being routed through the box.  (kernel >= 2.4.18).
-    * `POSTROUTING` For altering packets as they are about to go out. (kernel >= 2.4.18).
+* `nat` - This table allows you to route packets to different hosts on NAT (Network Address Translation) networks by changing the source and destination addresses of packets. It is often used to allow access to services that can’t be accessed directly, because they’re on a NAT network.
 
-* `raw` - This table is used mainly for configuring exemptions from connection tracking in combination with the `NOTRACK` target.  It registers at the `netfilter` hooks with higher priority and is thus called before ip_conntrack, or any other IP tables. It provides the following built-in chains: 
-    * `PREROUTING` - For packets arriving via any network interface.
-    * `OUTPUT` - For packets generated by local processes.
+* `raw`- iptables is a stateful firewall, which means that packets are inspected with respect to their “state”. (For example, a packet could be part of a new connection, or it could be part of an existing connection.) The raw table allows you to work with packets before the kernel starts tracking its state. In addition, you can also exempt certain packets from the state-tracking machinery.
 
-* `security` - This table is used for `Mandatory Access Control (MAC)` networking rules, such as those enabled by the `SECMARK` and `CONNSECMARK` targets. Mandatory Access Control is implemented by `Linux Security Modules` such as `SELinux`. _The security table is called after the filter table_, allowing any `Discretionary Access Control (DAC)` rules in the filter table to take effect before MAC rules. This table provides the following built-in chains: 
-    * `INPUT` - For packets coming into the box itself.
-    * `OUTPUT` - For altering locally-generated packets before routing.
-    * `FORWARD` - For altering packets being routed through the box.
+* `security` - In addition, some kernels also have a security table. It is used by SELinux to implement policies based on `SELinux` security contexts.
 
 ---
 
-## Commands
+## Chains
+
+Now, each of these tables are composed of a few default chains. These chains allow you to filter packets at various points. The list of chains iptables provides are:
+
+* `PREROUTING` - Apply to packets as they just arrive on the network interface. This chain is present in the `nat`, `mangle` and `raw` tables.
+
+* `INPUT` - Rules in this chain apply to packets just before they’re given to a local process. This chain is present in the `mangle` and `filter` tables.
+
+* `OUTPUT` - Apply to packets just after they’ve been produced by a process. This chain is present in the `raw`, `mangle`, `nat` and `filter` tables.
+
+* `FORWARD`- Apply to any packets that are routed through the current host. This chain is only present in the `mangle` and `filter` tables.
+
+* `POSTROUTING` - Apply to packets as they just leave the network interface. This chain is present in the `nat` and `mangle` tables.
+
+### `iptables` packet filtering
+<img src="iptables-filtering.png" 
+    style="background-color: white; border-radius: 10px"/>
+
+---
+
+## Targets
+
+`chains` allow you to filter traffic by adding `rules` to them. `targets` then decide the fate of a packet.
+
+Some targets are `terminating`, which means that they decide the matched packet’s fate immediately: 
+
+* `ACCEPT` - This causes `iptables` to __accept__ the packet.
+
+* `DROP`  - This causes `iptables` to __drop__ the packet. To anyone trying to connect to your system, it would appear like the system didn’t even exist
+
+* `REJECT` - This causes `iptables` __rejects__ the packet. It sends a “connection reset” packet in case of TCP, or a “destination host unreachable” packet in case of UDP or ICMP.
+
+Some targets are `non-terminating`, which means that they keep matching other rules even if a match was found:
+
+* `LOG` - This causes `iptables` to __log__ the packet. The information should be logged to `/var/log/syslog` (or `/var/log/messages`).
+
+* `RETURN` - This causes `iptables` to return from this chain and continue processing from the next rule.
+
+`custom chains` can also be created for complex rule-sets and these can be jumped to as a target.
+
+> NB: There are further actions beyond these `QUEUE`, etc.
 
 
 ---
 
-## Tutorials
+## Commands and Rules
 
-* [Introduction to `iptable` firewalls](https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall)
-* [Firewall Essentials](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands)
-* [In Depth Guide to iptables](https://www.booleanworld.com/depth-guide-iptables-linux-firewall/)
-* [In Depth `iptables` NAT](https://www.karlrupp.net/en/computer/nat_tutorial)
+* The `iptables` command can be used to view and modify the table chains:
+
+    * `chains` are queried as follows:
+        * `t` - Target chain on table. The default is the `filter` table.
+        * `L` - List all chains.
+        * `-v` - Verbose ouput.
+        * `--line-numbers` - Used to include the rules index - this is used for operation on a specific rule.
+        * `-N` - CCreate a new `custom chain`.
+        * `-P` - Change the `default policy` (target) for a chain.
+        * etc.
+
+    * `rules` are added/deleted to `chains` via commands:
+        * `-I` - Insert a rule (at top).
+        * `-A` - Append a rule (at bottom).
+        * `-D` - Delete a rule.
+        * `-R` - Replace/Update a rule.
+        * etc.
+
+    * `criteria` is set for rules using options:
+        * `-m`     - Match on `module` criteria.
+        * `-p`     - Match on protocol.
+        * `-i`     - Match on input interface.
+        * `-o`     - Match on output interface.
+        * `-s`     - Match on source ip.
+        * `-d`     - Match on destination ipi.
+        * `-sport` - Match on source port. (tcp module)
+        * `-dport` - Match on destination port. (tcp module)
+        * `!`      - Negation.
+        * etc.
+
+    * `target` is set for a rule using options:
+        * `-j` - Set the `target`.
+
+    Example:
+    ```
+    iptables -L --line-numbers
+    iptables -t filter -A INPUT -s 59.45.175.62 -j REJECT
+    iptables -D INPUT 2
+    iptables -R INPUT 1 -s 59.45.175.10 -j ACCEPT
+    ```
+
+* The `iptables-save` command can be used to save te changes so they are persisted between reboots.
+
+
+---
+
+## Modules
+
+`modules` allow further packet matching criteria to be specified. They are defined with `-m` option:
+
+* __`tcp`__ - Allow source and destination ports in criteria:
+
+    * `-sport` - Match on source port. (tcp module)
+
+    * `-dport` - Match on destination port. (tcp module)
+
+* __`multiport`__ - Allow multiple ports in criteria:
+
+    * `-sports` - Match on source port. (tcp module)
+
+    * `-dports` - Match on destination port. (tcp module)
+
+* __`conntrack`__ - Allow _connection state_ in criteria: 
+
+    * `NEW`: This state represents the very first packet of a connection.
+
+    * `ESTABLISHED`: This state is used for packets that are part of an existing connection. For a connection to be in this state, it should have received a reply from the other host.
+
+    * `RELATED`: This state is used for connections that are related to another `ESTABLISHED` connection. An example of this is a FTP data connection — they’re “related” to the already “established” control connection.
+
+    * `INVALID`: This state means the packet doesn’t have a proper state. This may be due to several reasons, such as the system running out of memory or due to some types of `ICMP` traffic.
+
+    * `UNTRACKED`: Any packets exempted from connection tracking in the raw table with the `NOTRACK` target end up in this state.
+
+    * `DNAT`: This is a virtual state used to represent packets whose destination address was changed by rules in the `nat` table.
+
+    * `SNAT`: Like `DNAT`, this state represents packets whose source address was changed.
+
+* __`limit`__ - Place a limit to the number of packets passing through the network.
+    * `iptables -A INPUT -p icmp -m limit --limit 1/sec --limit-burst 1 -j ACCEPT`
+    * Cannot handle a dynamic, per IP restriction. 
+
+* __`recent`__ - Place a limit to the number of packets from a specific ip.
+
+* __`owner`__ - Block traffic on a per user basis.
+
+
+---
+
+## Tutorials - Simple
+
+### Quick
+* [Simple `iptables` Tutorial 1](https://www.hostinger.co.uk/tutorials/iptables-tutorial)
+* [Simple `iptables` Tutorial 2](https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall)
+
+### Practical
+* [`iptables` Overview](https://www.booleanworld.com/depth-guide-iptables-linux-firewall/)
+* [`iptables` Common Commands](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands)
+
+### In Depth
+* [`iptables` Tutorial](https://www.frozentux.net/iptables-tutorial/iptables-tutorial.html)
+* [`iptables` NAT Tutorial](https://www.karlrupp.net/en/computer/nat_tutorial)
+
 
 ---
 
@@ -111,4 +220,6 @@ Several different `tables` are defined.  Each table contains a number of built-i
 * [netfilter.org](https://netfilter.org/)
 * [Home](https://netfilter.org/projects/iptables/index.html)
 * [Man page](http://ipset.netfilter.org/iptables.man.html)
+* [`iptables` filtering diagram](https://www.booleanworld.com/wp-content/uploads/2017/06/Untitled-Diagram.png)
 
+* [Netfilter Extensions](https://www.netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO-3.html)
