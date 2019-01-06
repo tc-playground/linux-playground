@@ -1,0 +1,114 @@
+# iptables
+
+## Introduction
+
+* `iptables` and `ip6tables` are used to set up, maintain, and inspect the `tables` of IPv4 and IPv6 `packet filter rules` in the Linux kernel.
+
+* `iptables` can allow `firewalls` to be implement.
+
+* `iptables` can allow `NATs` to be implement.
+
+---
+
+## Overview
+
+* All data is sent in the form packets over the internet. 
+
+* Linux kernel provides an interface (`netfilter`) to filter both __incoming__ and __outgoing__ __traffic packets__ using __tables__ of __packet filters__.
+
+* `iptables` manages _chains_ of _rules_ that govern _input_, _output_, and _routed_ traffic through the system. The _chains_ are grouped into _tables_ by purpose.
+
+* _Tables_ - There are 5 defaults tables: `filter` (default), `nat`, `mangle`, `raw`, and, `security`.
+
+* _Chains_ - Contain set of rules that are applied to packets at certain points of the packet handling process:  `PREROUTING`, `INPUT`, `FORWARD`, `OUTPUT`, and `POSTROUTING`.
+
+* _Rules_ -  
+
+* _Rules Targets__ - `ACCEPT`, `DROP`, `QUEUE` or `RETURN`. NB: Extensions also exist. 
+
+* `- For altering packets as soon as they come in. For altering incoming packets before routing. For packets arriving via any network interface.
+*  - FFor packets __coming into the box itself__. For packets __destined for local sockets__. 
+* - For packets __being routed through__ the box. For altering packets being routed through the box.
+* -  For packets __locally generated__ packets. For altering locally-generated packets before routing.
+* - For altering packets as they are about to go out.
+---
+
+## Firewall Rules and Targets
+
+* A `firewall rule` specifies criteria for a packet and a target. 
+* If the packet __does not match__, the next rule in the chain is the examined.
+* if the packet __does match__, then the next rule is specified by the value of the `target` which can be: 
+    * __the name of a user-defined chain__ - Examine the first rule at the start of this chain.
+    * __`ACCEPT`__ - Let the packet though.
+    * __`DROP`__ - Discard the packet.
+    * __`QUEUE`__ - Pass the packet to userspace (via `nfnetlink`/`ip_queue` `queue handler`). Packets with a target of QUEUE will be sent to queue number '0' in this case.
+    * __`RETURN`__ - Stop traversing this chain and resume at the next rule in the previous (calling) chain.
+*  If the end of a built-in chain is reached or a rule in a built-in chain with target RETURN is matched, the target specified by the chain policy determines the fate of the packet.
+* `iptables` can use extended packet matching and target modules. A list of these is available in the `iptables-extensions(8)` manpage.    
+
+---
+
+## Chains
+
+Several different `chain` types are defined. They denotes the semantic target of the rules applied.
+
+* `PREROUTING` - For altering packets as soon as they come in. For altering incoming packets before routing. For packets arriving via any network interface.
+* `INPUT` - FFor packets __coming into the box itself__. For packets __destined for local sockets__. 
+* `FORWARD` - For packets __being routed through__ the box. For altering packets being routed through the box.
+* `OUTPUT` -  For packets __locally generated__ packets. For altering locally-generated packets before routing.
+* `POSTROUTING` - For altering packets as they are about to go out.
+
+---
+
+## Tables
+
+Several different `tables` are defined.  Each table contains a number of built-in chains and may also contain user-defined chains.
+
+* `filter` - This is the default table. It provides the following built-in chains: 
+    * `INPUT` - For packets __destined for local sockets__.
+    * `FORWARD` - For packets __being routed through__ the box. 
+    * `OUTPUT` -  For packets __locally generated__ packets.
+
+* `nat` -This table is consulted when a packet that creates a new connection is encountered. It provides the following built-in chains:  
+    * `PREROUTING` - For altering packets as soon as they come in.
+    * `OUTPUT` - For altering locally-generated packets before routing.
+    * `POSTROUTING` - For altering packets as they are about to go out.
+
+* `mangle` - This table is used for specialized packet alteration. Until kernel 2.4.17 it had two built-in chains: 
+    * `PREROUTING` - For altering incoming packets before routing.
+    * `OUTPUT` - For altering locally-generated packets before routing. 
+    * `INPUT` - For packets coming into the box itself. (kernel >= 2.4.18).
+    * `FORWARD` - For altering packets being routed through the box.  (kernel >= 2.4.18).
+    * `POSTROUTING` For altering packets as they are about to go out. (kernel >= 2.4.18).
+
+* `raw` - This table is used mainly for configuring exemptions from connection tracking in combination with the `NOTRACK` target.  It registers at the `netfilter` hooks with higher priority and is thus called before ip_conntrack, or any other IP tables. It provides the following built-in chains: 
+    * `PREROUTING` - For packets arriving via any network interface.
+    * `OUTPUT` - For packets generated by local processes.
+
+* `security` - This table is used for `Mandatory Access Control (MAC)` networking rules, such as those enabled by the `SECMARK` and `CONNSECMARK` targets. Mandatory Access Control is implemented by `Linux Security Modules` such as `SELinux`. _The security table is called after the filter table_, allowing any `Discretionary Access Control (DAC)` rules in the filter table to take effect before MAC rules. This table provides the following built-in chains: 
+    * `INPUT` - For packets coming into the box itself.
+    * `OUTPUT` - For altering locally-generated packets before routing.
+    * `FORWARD` - For altering packets being routed through the box.
+
+---
+
+## Commands
+
+
+---
+
+## Tutorials
+
+* [Introduction to `iptable` firewalls](https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall)
+* [Firewall Essentials](https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands)
+* [In Depth Guide to iptables](https://www.booleanworld.com/depth-guide-iptables-linux-firewall/)
+* [In Depth `iptables` NAT](https://www.karlrupp.net/en/computer/nat_tutorial)
+
+---
+
+## References
+
+* [netfilter.org](https://netfilter.org/)
+* [Home](https://netfilter.org/projects/iptables/index.html)
+* [Man page](http://ipset.netfilter.org/iptables.man.html)
+
