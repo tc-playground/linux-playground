@@ -38,6 +38,16 @@ function iptables::persist-rules()
     sudo iptables-save
 }
 
+# Save
+function iptables::save-rules() 
+    sudo iptables-save > iptables.rules
+}
+
+# Load
+function iptables::load-rules() 
+    sudo iptables-restore < iptables.rules
+}
+
 # Firewall functions ==========================================================
 #
 
@@ -174,23 +184,23 @@ function iptables::drop-invalid-packets() {
 # Module ======================================================================
 #
 
-function uml::load() {
+function iptables::load() {
     [[ "${BASH_SOURCE[0]}" == "${0}" ]] \
         && echo "The 'load' command must be 'sourced' when invoked." && exit 1
     local target="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)/$(basename ${BASH_SOURCE[0]})"
-    alias uml="${target}"
+    alias iptables="${target}"
 }
 
-function uml::unload() {
+function iptables::unload() {
     [[ "${BASH_SOURCE[0]}" == "${0}" ]] \
         && echo "The 'unload' command must be 'sourced' when invoked." && exit 1
-    unalias uml
-    unset -v $(env | grep UML | cut -d'=' -f1 | xargs)
-    unset -f $(declare -F | grep 'uml::' | awk '{print $NF}' | xargs)
+    unalias iptables
+    unset -v $(env | grep IP_TABLES | cut -d'=' -f1 | xargs)
+    unset -f $(declare -F | grep 'iptables::' | awk '{print $NF}' | xargs)
 }
 
-function uml::reload() {
-    local module="$(alias | grep 'uml=' | cut -d'=' -f2 | xargs)"
+function iptables::reload() {
+    local module="$(alias | grep 'iptables=' | cut -d'=' -f2 | xargs)"
     . "${module}" unload
     . "${module}" load
 }
