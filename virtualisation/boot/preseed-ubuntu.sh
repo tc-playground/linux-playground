@@ -59,76 +59,69 @@ function preseed::generate-preseed() {
     chmod u+w "${extraction_path}/preseed"
     touch "${extraction_path}/preseed/custom.seed"
     cat > "${extraction_path}/preseed/custom.seed" << EOF
-#### Contents of the peconfiguration file (for cosmic)
-# Localization
-d-i debian-installer/language string en
-d-i debian-installer/country string gb
-d-i debian-installer/locale string en_GB.UTF-8
-
-# Keyboard selection.
-d-i console-setup/ask_detect boolean false
-d-i keyboard-configuration console-setup/detected note
-d-i keyboard-configuration/layoutcode string gb
-d-i keyboard-configuration/model select Generic 105-key (Intl) PC
-d-i keyboard-configuration/xkb-keymap select gb
-# d-i keyboard-configuration/xkb-keymap select British English
-
-# Network configuration
-d-i netcfg/choose_interface select auto
-d-i netcfg/hostname string unnamed
-d-i netcfg/wireless_wep string
-
-# Mirror settings (assume no proxy is required)
-# d-i mirror/http/proxy string
-# d-i mirror/http/mirror select ubuntu.mirrors.uk2.net/ubuntu/
-
-# To create a normal user account.
-d-i passwd/user-fullname string Ubuntu User
-d-i passwd/username string ubuntu
-
-# default password is ubuntu
-d-i passwd/user-password-crypted password ubuntu
-d-i user-setup/allow-password-weak boolean true
-d-i user-setup/encrypt-home boolean false
-
-# Clock and time zone setup
-d-i clock-setup/utc boolean true
-d-i time/zone string Europe/London
-d-i clock-setup/ntp boolean true
-d-i clock-setup/ntp-server string uk.pool.ntp.org
 
 # Partitioning
-d-i partman-auto/method string regular
-d-i partman-lvm/device_remove_lvm boolean true
-d-i partman-md/device_remove_md boolean true
-d-i partman-lvm/confirm boolean true
-d-i partman-lvm/confirm_nooverwrite boolean true
-d-i partman-auto/choose_recipe select atomic
-d-i partman/default_filesystem string ext4
+# Old style using d-i command
+#d-i partman-auto/disk string /dev/sda
+#d-i partman-auto/method string regular
+#d-i partman-lvm/device_remove_lvm boolean true
+#d-i partman-md/device_remove_md boolean true
+#d-i partman-auto/choose_recipe select atomic
+
+# Newer ubiquity command
+ubiquity partman-auto/disk string /dev/sda
+ubiquity partman-auto/method string regular
+ubiquity partman-lvm/device_remove_lvm boolean true
+ubiquity partman-md/device_remove_md boolean true
+ubiquity partman-auto/choose_recipe select atomic
+
+# This makes partman automatically partition without confirmation
 d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
-d-i partman/mount_style select uuid
 
-# Package selection
-# below command has no d-i in it, it is not an error
-# remove this line alone allow selection of packages
-tasksel tasksel/first multiselect ubuntu-server
-# the below packages will be installed even if you comment out the above line and choose nothing to install during package selection.
-d-i pkgsel/include string openssh-server vim samba
-d-i pkgsel/upgrade select none
-d-i pkgsel/update-policy select none
+# Locale
+d-i debian-installer/locale string en_US
+d-i console-setup/ask_detect boolean false
+d-i console-setup/layoutcode string us
 
-# GRUB configuration, disable splash and quiet to reduce error in graphics drivers of virtual machines
-d-i debian-installer/quiet boolean false
-d-i debian-installer/splash boolean false
+# Network
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+d-i netcfg/choose_interface select auto
+
+# Clock
+d-i clock-setup/utc-auto boolean true
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Pacific
+d-i clock-setup/ntp boolean true
+
+# Packages, Mirrors, Image
+d-i mirror/country string US
+d-i apt-setup/multiverse boolean true
+d-i apt-setup/restricted boolean true
+d-i apt-setup/universe boolean true
+
+# Users
+d-i passwd/user-fullname string User
+d-i passwd/username string user
+d-i passwd/user-password-crypted password yourEncryptedPasswd
+d-i passwd/user-default-groups string adm audio cdrom dip lpadmin sudo plugdev sambashare video
+d-i passwd/root-login boolean true
+d-i passwd/root-password-crypted password rootEncryptedPasswd
+d-i user-setup/allow-password-weak boolean true
+
+# Grub
+d-i grub-installer/grub2_instead_of_grub_legacy boolean true
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/timeout string 10
-
 d-i finish-install/reboot_in_progress note
-d-i cdrom-detect/eject boolean false
 
+# Custom Commands
+ubiquity ubiquity/success_command string \
+  sed -i -e 's/dns=dnsmasq/#dns=dnsmasq/' /target/etc/NetworkManager/NetworkManager.conf ;\
+  cp -a /cdrom/scripts/ /target/root/ ;\
+  cp -a /cdrom/salt/ /target/root/
 EOF
     chmod 444 "${extraction_path}/preseed/custom.seed"
     chmod u-w "${extraction_path}/preseed"
@@ -136,7 +129,7 @@ EOF
     echo "Generated custom preseed: ${extraction_path}/preseed/custom.seed"
 }
 
-
+# GENERATE Installer Menu
 function preseed::generate-installer-menu() {
         local extraction_path=$1
 
@@ -157,7 +150,9 @@ EOF
     echo "Generated installer menu config: ${extraction_path}/isolinux/txt.cfg"
 }
 
-function preseed::bake-custom-iso-image() {
+
+# CREATE custom iso image
+function preseed::create-custom-iso-image() {
     local extraction_path=$1
     local parent_path="$(dirname ${extraction_path})"
 
@@ -185,7 +180,8 @@ function preseed::build-custom-iso() {
     preseed::extract-iso-image "${build_path}"/"${iso_name}" "${extraction_path}" "${mount_path}"
     preseed::generate-preseed "${extraction_path}"
     preseed::generate-installer-menu "${extraction_path}"
-    preseed::bake-custom-iso-image "${extraction_path}"
+    preseed::create-custom-iso-image "${extraction_path}"
+    # sudo rm -Rf "${extraction_path}"
 }
 
 

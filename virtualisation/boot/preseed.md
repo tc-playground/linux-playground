@@ -4,16 +4,12 @@
 
 A `preseed` is a special file mounted inside a (debian) linux operating system image that pre-defines the user options specified when the operating system is installed for the first time.
 
----
-
-## Overview
-
-TODO
 
 ---
 
 ## Tutorials
-
+* [__Unattended Ubuntu Install__](https://github.com/netson/ubuntu-unattended)
+* [Scott Lowe Tutorial](https://blog.scottlowe.org/2015/05/20/fully-automated-ubuntu-install/)
 * [Automated Ubuntu Server Install - Tutorial](https://blog.donaldtong.net/2017/06/automated-ubuntu-server-17-04-with-preseed-file/)
 * [Automated Ubuntu Server Install - Ask Ubuntu](https://askubuntu.com/questions/806820/how-do-i-create-a-completely-unattended-install-of-ubuntu-desktop-16-04-1-lts)
 
