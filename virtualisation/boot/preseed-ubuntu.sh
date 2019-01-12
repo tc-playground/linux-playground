@@ -31,40 +31,35 @@ function preseed::extract-iso-image() {
     local extraction_path="${2:-$(dirname ${iso_path})}"
     local mount_path="${3:-/mnt/cdrom}"
 
-    echo "iso_path        : ${iso_path}"
-    echo "extraction_path : ${extraction_path}"
-    echo "mount_path      : ${mount_path}"
-
-    # mounting
-    echo "Mounting..."
+    echo "Mounting: ${iso_path} -> ${mount_path}"
     sudo mount -o loop "${iso_path}" "${mount_path}"
 
-    sudo mkdir -p "${extraction_path}"
-    if [ ! -d "${extraction_path}/iso" ]; then
-        echo "Extracting..."
-        sudo mount -o loop "${iso_path}" "${mount_path}"
+    if [ ! -d "${extraction_path}" ]; then
+        echo "Extracting: ${mount_path} -> ${extraction_path}"
+        mkdir -p "${extraction_path}"
         # rsync -av "${mount_path}" "${extraction_path}/iso"
-        sudo mkdir -p "${extraction_path}/iso"
-        sudo cp -rT "${mount_path}" "${extraction_path}/iso"
+        cp -rT "${mount_path}" "${extraction_path}"
     fi
 
     # sudo apt-get install debconf-utils
     # debconf-get-selections >> selections.txt
 
-    echo "Unmounting..."
+    echo "Unmounting: ${iso_path} -> ${mount_path}"
     sudo umount "${mount_path}"
-
-    preseed::generate-preseed "${extraction_path}/iso"
-
 }
 
 
 # GENERATE the preseed file.
 function preseed::generate-preseed() {
-    local extracted_iso_path=$1
+    local extraction_path=$1
+
+    echo "Generating custom preseed: ${extraction_path}/preseed/custom.seed"
+
     # Write network configuration.
-    cat > "${extracted_iso_path}/preseed/custom.preseed" << EOF
-#### Contents of the preconfiguration file (for cosmic)
+    chmod u+w "${extraction_path}/preseed"
+    touch "${extraction_path}/preseed/custom.seed"
+    cat > "${extraction_path}/preseed/custom.seed" << EOF
+#### Contents of the peconfiguration file (for cosmic)
 # Localization
 d-i debian-installer/language string en
 d-i debian-installer/country string gb
@@ -92,7 +87,7 @@ d-i passwd/user-fullname string Ubuntu User
 d-i passwd/username string ubuntu
 
 # default password is ubuntu
-d-i passwd/user-password-crypted password $6$B2Kq.uhkH1Enlj$1IMbJZY3S6cTlYzKEzoobgYs6PTnaAfvMO885dUmZz/SXacFihZLK8QDyPOBA/FpOdacRkZnwO06b9/XpO5E81
+d-i passwd/user-password-crypted password ubuntu
 d-i user-setup/allow-password-weak boolean true
 d-i user-setup/encrypt-home boolean false
 
@@ -135,7 +130,62 @@ d-i finish-install/reboot_in_progress note
 d-i cdrom-detect/eject boolean false
 
 EOF
-    echo "Generated preseed"
+    chmod 444 "${extraction_path}/preseed/custom.seed"
+    chmod u-w "${extraction_path}/preseed"
+
+    echo "Generated custom preseed: ${extraction_path}/preseed/custom.seed"
+}
+
+
+function preseed::generate-installer-menu() {
+        local extraction_path=$1
+
+    echo "Generating custom installer menu config: ${extraction_path}/isolinux/txt.cfg"
+
+    # Write network configuration.
+    chmod u+w "${extraction_path}/isolinux"
+    chmod u+w "${extraction_path}/isolinux/txt.cfg"
+    cat > "${extraction_path}/isolinux/txt.cfg" << EOF
+label autoinstall
+  menu label ^Install Ubuntu Server
+  kernel /casper/vmlinuz
+  append auto=true file=/cdrom/preseed/custom.seed boot=casper initrd=/casper/initrd nosplash ---
+EOF
+    chmod 444 "${extraction_path}/isolinux/txt.cfg"
+    chmod u-w "${extraction_path}/isolinux"
+
+    echo "Generated installer menu config: ${extraction_path}/isolinux/txt.cfg"
+}
+
+function preseed::bake-custom-iso-image() {
+    local extraction_path=$1
+    local parent_path="$(dirname ${extraction_path})"
+
+    sudo mkisofs -J -l -b isolinux/isolinux.bin \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table \
+        -z \
+        -iso-level 4 \
+        -c isolinux/boot.cat \
+        -o "${parent_path}/ubuntu-18.10-custom-live-server-amd64.iso" \
+        -joliet-long \
+        "${extraction_path}"
+}
+
+
+# Generate a custom iso.
+function preseed::build-custom-iso() {
+    local iso_name="${PRESEED_VANILLA_ISO}"
+    local build_path="${PRESEED_ISO_PATH}"
+    local extraction_path="${build_path}/iso"
+    local mount_path="/mnt/cdrom"
+    
+    preseed::vanilla-iso-download "${build_path}" "${iso_name}"
+    preseed::extract-iso-image "${build_path}"/"${iso_name}" "${extraction_path}" "${mount_path}"
+    preseed::generate-preseed "${extraction_path}"
+    preseed::generate-installer-menu "${extraction_path}"
+    preseed::bake-custom-iso-image "${extraction_path}"
 }
 
 
