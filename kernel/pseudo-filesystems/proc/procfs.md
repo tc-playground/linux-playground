@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The `proc` filesystem (`procfs`) is a special 'pseudo filesystem' in Unix-like operating systems that presents information about __processes__ and other system information in a hierarchical file-like structure using `virtual files`..
+The `proc` filesystem (`procfs`) is a special 'pseudo filesystem' in Unix-like operating systems that presents information about __processes__ and other system information in a hierarchical file-like structure using `virtual files`.
 
 The `proc` filesystem provides a method of communication between __kernel space__ and __user space__. For example, `ps` uses the proc file system to obtain its data, without using any specialized system calls.
 
