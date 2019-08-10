@@ -237,7 +237,7 @@ function vm::network-bridge-iface-remove() {
     sudo cat /var/lib/libvirt/dnsmasq/virbr0.status
 }
 
-# Stoarge =====================================================================
+# Storage =====================================================================
 #
 
 [ -z "${LIBVIRT_HOME}" ] && export LIBVIRT_HOME="${HOME}/virt-kvm"
