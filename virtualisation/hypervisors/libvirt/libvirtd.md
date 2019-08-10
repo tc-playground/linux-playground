@@ -29,8 +29,6 @@ libvirtd cna be interacted with in various ways:
     * __qemu system__ - `qemu:///system`
     * __qemu session__ - `qemu:///session`
 
-
-
 ---
 
 ## References

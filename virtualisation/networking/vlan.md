@@ -1,7 +1,5 @@
 # VLAN
 
-STUB
-
 ## Introduction
 
 * `VLANs`are a bit like virtual switch. 
@@ -11,6 +9,8 @@ STUB
 * `VLANs` augment network packets by adding additional `tags`. These are used to select packets for additional L2 behaviour: routing, traffic control, etc.
 
 * `VLANs` functionality can be implemented in hardware or software.
+
+---
 
 ## Overview
 
