@@ -7,17 +7,17 @@
 # =============================================================================
 
 # Create a home for local ISO images.
-ISO_HOME="kvm-iso"
+export KVM_ISO_HOME="kvm-iso"
 function kvm::create-iso-store() {
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-    mkdir -p "${DIR}/${ISO_HOME}"
+    mkdir -p "${DIR}/${KVM_ISO_HOME}"
 }
 
-DISK_POOL="kvm-dev"
+export KVM_DISK_POOL="kvm-dev"
 # Create a home for storage device pools.
 function kvm::create-storage-pool() {
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-    mkdir -p "${DIR}/${DISK_POOL}"
+    mkdir -p "${DIR}/${KVM_DISK_POOL}"
 }
 
 # Download iso if they don't exist already.
@@ -25,7 +25,7 @@ function kvm::create-storage-pool() {
 # Glu usecase: If we download an iso, we also want to add it to .gitignore. 
 function kvm::download-isos() {
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-    pushd "${DIR}/${ISO_HOME}" > /dev/null
+    pushd "${DIR}/${KVM_ISO_HOME}" > /dev/null
 
     # alpine-standard-3.8.2-x86_64.iso
     if [ ! -f "CentOS-7-x86_64-Minimal-1810.iso" ]; then
@@ -50,7 +50,7 @@ function kvm::download-isos() {
         curl -LO http://mirror.ox.ac.uk/sites/mirror.centos.org/7.6.1810/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso
     fi
 
-    popd > /dev/null 
+    popd > /dev/null
 }
 
 # Restart the libvirtd daemon.
