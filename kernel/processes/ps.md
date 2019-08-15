@@ -1,7 +1,5 @@
 # ps
 
----
-
 ## Introduction
 
 `ps` displays information about a selection of the active processes.  If you want a repetitive update of the selection and the displayed information, use top(1) instead.
