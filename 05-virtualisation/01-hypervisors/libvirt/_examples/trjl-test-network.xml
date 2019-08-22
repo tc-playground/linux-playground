@@ -1,0 +1,16 @@
+<network>
+  <name>trjl-test</name>
+  <uuid>bc8aa350-0c6e-11e9-88f0-27a34c53ed65</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='02:9d:39:8d:72:d0'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>

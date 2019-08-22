@@ -1,0 +1,42 @@
+<domain type='kvm'>
+  <name>MyNewVM</name>
+  <currentMemory>524288</currentMemory>
+  <memory>524288</memory>
+  <uuid>30d18a08-d6d8-d5d4-f675-8c42c11d6c62</uuid>
+  <os>
+    <type arch='x86_64'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>1</vcpu>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/var/lib/libvirt/images/MyNewVM.img'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='52:54:00:9c:94:3b'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='vnc' port='-1'/>
+    <console type='pty'/>
+    <sound model='ac97'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>
