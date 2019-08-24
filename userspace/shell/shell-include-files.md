@@ -1,4 +1,0 @@
-# Shell Include files
-
-## Introduction
-
