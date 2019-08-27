@@ -70,9 +70,19 @@
     grub-mkrescue -o kustom-kernel.iso iso/
     ```
 
-9. Run a VM
+9. Run in QEMU/KVM
 
-    * `cp kustom-kernel.iso $HOME/temos/environments/kvm-local/kvm-iso`
+    1. Copy the kernel into your `iso pool`, eg:
+
+        * `cp kustom-kernel.iso $HOME/temos/environments/kvm-local/kvm-iso`
+
+    2. Open `Virtual Machine Manager` and `Create a new Virtual Machine`.
+
+    3. Choose boot from ISO and select the `kustom-kernel.iso` image. Also, select the `Alt regular *alt.sisyphus` kernel type.
+
+    4. Finish configuring the machine - give a small bit of memory, no disks, or networks, etc.
+
+    5. Go!
 
 ---
 
@@ -121,5 +131,8 @@
 * [Common Text Modes](https://en.wikipedia.org/wiki/Text_mode#PC_common_text_modes)
 
 * [Linux Kernel Coding Style](https://www.kernel.org/doc/html/v4.10/process/coding-style.html)
+
+* [Booting a Custom Linux Kernel](http://nickdesaulniers.github.io/blog/2018/10/24/booting-a-custom-linux-kernel-in-qemu-and-debugging-it-with-gdb/)
+
 
 

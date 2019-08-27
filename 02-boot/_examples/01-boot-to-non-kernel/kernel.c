@@ -37,8 +37,8 @@ void main(void)
     vga_index = 0;
 
     clear_screen();
-    print_string("Hello from Linux Journal!", YELLOW);
+    print_string("Hello from the Kustom Kernel!", YELLOW);
     vga_index = 80;    /* next line */
-    print_string("Goodbye from Linux Journal!", RED);
+    print_string("Goodbye from the Kustom Kernel...", RED);
     return;
 }
