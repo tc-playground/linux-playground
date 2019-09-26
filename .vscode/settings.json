@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "APIPA",
         "BPDUs",
         "CIDR",
         "CONNSECMARK",
@@ -105,6 +106,7 @@
         "futexes",
         "gconfig",
         "gcow",
+        "getent",
         "grplist",
         "guestfish",
         "guestfs",
@@ -183,6 +185,7 @@
         "rarp",
         "rdmsr",
         "resb",
+        "resolv",
         "rmmod",
         "rootfs",
         "routef",
