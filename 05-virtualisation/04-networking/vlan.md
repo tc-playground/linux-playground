@@ -6,7 +6,7 @@
 
 * `VLANs` allow _multiple separate virtual networks_ to run on top of _single physical network_.
 
-* `VLANs` augment network packets by adding additional `tags`. These are used to select packets for additional L2 behaviour: routing, traffic control, etc.
+* `VLANs` augment network packets by adding additional `tags`. These are used to select packets for additional `L2` behaviour: `routing`, `traffic control`, etc.
 
 * `VLANs` functionality can be implemented in hardware or software.
 
@@ -14,7 +14,7 @@
 
 ## Overview
 
-* A _virtual LAN (VLAN)_ is any broadcast domain that s partitioned and isolated in a computer network at the data link layer (OSI layer 2).
+* A `virtual LAN (VLAN)` is any broadcast domain that s partitioned and isolated in a computer network at the `data link layer` (`OSI layer 2`).
 
 * `VLAN`s work by applying tags to network packets and handling these tags in networking systems – creating the appearance and functionality of network traffic that is physically on a single network but acts as if it is split between separate networks. In this way, VLANs can keep network applications separate despite being connected to the same physical network, and without requiring multiple sets of cabling and networking devices to be deployed.
 

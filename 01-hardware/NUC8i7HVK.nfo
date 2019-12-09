@@ -1,0 +1,38 @@
+# NUC8i7HVK
+
+## Installation Notes
+
+1. Install graphics : https://askubuntu.com/questions/1040440/graphics-drivers-for-intel-nuc-hades-canyon-nuc8i7hvk-amd-radeon-rx-vega-gh
+
+    1  ls
+    2  sudo vim /etc/default/grub 
+    3  sudo vi /etc/default/grub 
+    4  sudo update grub
+    5  sudo update-grub
+    6  ls
+    7  uname -mrs
+    8  lspci | grep VGA
+    9  uname -mrs
+   10  lspci | grep VGA
+   11  lshw -c video
+   12  uname -mrs
+   13  lspci | grep VGA
+   14  lshw -c video
+   15  sudo lshw -c video
+   16  ls
+   17  vi
+   18  cd Desktop/
+   19  ls
+   20  vi N
+   21  vi NU
+   22  ls
+   23  vi NUC8i7HVK.nfo 
+   24  lspci | grep VGA
+   25  lspci
+   26  glxinfo | grep OpenGL
+
+
+
+
+
+ 
