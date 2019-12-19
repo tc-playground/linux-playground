@@ -4,11 +4,11 @@
 
 1. `.deb` is the basic unit of packaging in Debian based systems.
 
-2. There are several ways to manage packages on a debian based system.
+2. There are several ways to manage packages on a Debian based system.
 
     1. `dpkg` - The core package management program. Can install `.deb` archives directly.
 
-    2. `Advanced Package Tool (APT)` - The primary tool for managing debian based systems.
+    2. `Advanced Package Tool (APT)` - The primary tool for managing Debian based systems.
 
         > __Legacy__ commands also exist with slightly different names: `apt-get`, `apt-cache`, etc.
 
@@ -16,7 +16,7 @@
 
     4. `synaptic` - Provides am `graphical` frontend to the apt package management infrastructure.
 
-    5. __Application Stores__ - Curated contentent provided by various windows environments and distributions: 
+    5. __Application Stores__ - Curated content provided by various windows environments and distributions: 
 
         1. GNOME Software. 
         
