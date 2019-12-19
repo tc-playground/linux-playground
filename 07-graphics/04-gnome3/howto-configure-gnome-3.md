@@ -98,6 +98,12 @@
 
 ## 4. Enable Fractional Scaling
 
+* __How to determine Window Session Type__
+
+    ```bash
+    loginctl show-session 2 -p Type 
+    ```
+
 * __Gnome 3.32 - Wayland__
 
     ```bash
