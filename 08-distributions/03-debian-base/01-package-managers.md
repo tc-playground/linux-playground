@@ -24,7 +24,7 @@
         
         3. Etc.
 
-    7. __Application Packagers__ - Tools distributing and uppdating self-containe applications:
+    7. __Application Packagers__ - Tools distributing and updating self-contained applications:
 
         1. [Snap](https://snapcraft.io) - Canonical application manager.
 
@@ -80,7 +80,7 @@
     apt install [${packages}]
     ```
 
-### __Unnstall Packages__
+### __Uninstall Packages__
 
 1. Uninstall just the `${package}`:
 
