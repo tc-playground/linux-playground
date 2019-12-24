@@ -8,7 +8,7 @@
 
 * `glibc` provides critical APIs including `ISO C11`, `POSIX.1-2008`, `BSD`, OS-specific APIs and more. 
 
-* `glibc` includes `sys-call` bindings such as `open`, `read`, `write`, `malloc`, `printf`, `getaddrinfo`, `dlopen`, `pthread_create`, `cryp`t, `login`, `exit`, etc..
+* `glibc` includes `sys-call` bindings such as `open`, `read`, `write`, `malloc`, `printf`, `getaddrinfo`, `dlopen`, `pthread_create`, `crypt`, `login`, `exit`, etc..
 
 * `glibc` has various implementations:
 
@@ -23,6 +23,9 @@
 ## References
 
 * __man pages__ - `man glibc`.
+
 * [Wikipedia - glibc](https://en.wikipedia.org/wiki/GNU_C_Library)
+
 * [GNU.org - glibc](https://www.gnu.org/software/libc/)
+
 * [musl-libc](https://wiki.musl-libc.org/)

@@ -1,0 +1,3 @@
+# Synchronization
+
+__STUB__

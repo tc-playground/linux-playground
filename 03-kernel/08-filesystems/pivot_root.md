@@ -10,7 +10,7 @@
 
 * `pivot_root` is called by the `kernel` during the `linux start-up process` to replace the `initramfs` with the `actual root filesystem`.
 
-* `pivot_root` is called by `containerisation systems` when initialising a new `namespaced processes` with `mount namespace` filesystem.
+* `pivot_root` is called by `containerisation systems` when initializing a new `namespaced processes` with `mount namespace` filesystem.
 
 * The caller of `pivot_root` must ensure that `processes` associated with the `old root` operate correctly afterwards. 
 
