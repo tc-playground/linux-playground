@@ -15,7 +15,7 @@
     ```
 ---
 
-## 2. Install `Gnome Shell Extesions`
+## 2. Install `Gnome Shell Extensions`
 
 1. Add `GNOME shell native connector` for operating system.
 
@@ -25,7 +25,7 @@
 
 2. Add the `GNOME shell integration` to browser of choice.
 
-    * [Gnome Shell Extesions - Firefox](https://addons.mozilla.org/en-US/firefox/addon/gnome-shell-integration/)
+    * [Gnome Shell Extensions - Firefox](https://addons.mozilla.org/en-US/firefox/addon/gnome-shell-integration/)
 
 3. Install the following extensions:
 
@@ -47,7 +47,7 @@
 
 ---
 
-## 3. Install `Gnome User Theme Extesions`
+## 3. Install `Gnome User Theme Extensions`
 
 1. Install `user themes extension`
 
@@ -55,7 +55,7 @@
 
 2. Obtain a theme. There are several types:
 
-    1. __Icon__ - Chnages the `icons`.
+    1. __Icon__ - Changes the `icons`.
 
     2. __Gnome Shell__ - Change the `desktop chrome`.
 
