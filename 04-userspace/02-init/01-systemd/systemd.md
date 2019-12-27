@@ -20,6 +20,12 @@
 
 ---
 
+## Basic Commands
+
+1. __shutdown__ - `systemctl poweroff` / `systemctl reboot`
+
+---
+
 ## References
 
 * [Wikipedia](https://en.wikipedia.org/wiki/Systemd)
