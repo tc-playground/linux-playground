@@ -1,10 +1,10 @@
-# ssh-kegen adn ssh-agent
+# ssh-keygen adn ssh-agent
 
 ## Introduction
 
 * `ssh-keygen` is a tool for creating `ssh public private keypairs` for `Public Key Infrastructure (PKI)`.
 
-* `ssh-agent` is a `daemon` for storing `passphrases` associated with `keys` to avoid being manually propmted for them when required.
+* `ssh-agent` is a `daemon` for storing `passphrases` associated with `keys` to avoid being manually prompted for them when required.
 
 ---
 
