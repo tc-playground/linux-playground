@@ -4,6 +4,8 @@
 
 * How to build a custom `linux distribution`.
 
+* [Linux from Scratch](http://www.linuxfromscratch.org)
+
 ---
 
 ## References
