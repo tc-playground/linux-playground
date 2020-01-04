@@ -20,6 +20,8 @@
 
 4. `dmsetup` is a command line utility that allows the device mapper and it's configuration to be inspected.
 
+5. To use `device mapper`, install the userspace configuration tool (`dmsetup`) and library (`libdevmapper`). 
+
 ---
 
 ## Operation
@@ -68,6 +70,8 @@
 
 * [Device Mapper - Wikipedia](https://en.wikipedia.org/wiki/Device_mapper)
 
+* [Device Mapper - Home Page](https://sourceware.org/dm/)
+
 * [dmsetup - CLI tool](https://linux.die.net/man/8/dmsetup)
 
     * [dmsetup - Examples](http://linuxadministrative.blogspot.com/2014/06/dmsetup-command-examples.html)
@@ -75,3 +79,5 @@
 * [ioctl - system call](https://en.wikipedia.org/wiki/Ioctl)
 
 * [Device Nodes](https://en.wikipedia.org/wiki/Device_file)
+
+* [Device Mapper Multipathing](https://www.thegeekdiary.com/beginners-guide-to-device-mapper-dm-multipathing/)
