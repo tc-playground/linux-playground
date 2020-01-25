@@ -36,18 +36,27 @@ A new virtual machine can then be created using the virt-manager UI. Use the fol
 ## References
 
 ### Ubuntu Installation
+
 * [Ubuntu KVM Installation](https://help.ubuntu.com/community/KVM/Installation)
+
 * [NixCraft Guide](https://www.cyberciti.biz/faq/installing-kvm-on-ubuntu-16-04-lts-server/)
 
 ### Tutorial
+
 * [Linux.com Tutorial 1](https://www.linux.com/learn/intro-to-linux/2017/5/creating-virtual-machines-kvm-part-1)
+
 * [Linux.com Tutorial 2](https://www.linux.com/learn/intro-to-linux/2017/5/creating-virtual-machines-kvm-part-2-networking)
 
 ### RHEL, CentOS, OEL Tutorial
+
 * [Installation](https://www.tecmint.com/install-and-configure-kvm-in-linux/)
+
 * [Networking](https://www.tecmint.com/multiple-virtual-machine-installation-using-network-install-kvm/)
+
 * [Storage Volumes and Pools](https://www.tecmint.com/manage-kvm-storage-volumes-and-pools/)
+
 * [Management Tools](https://www.tecmint.com/kvm-management-tools-to-manage-virtual-machines/)
 
 ### CentOS unattended `virt-create`
+
 * [kvm-sample Github](https://github.com/uvirt/kvm-sample)

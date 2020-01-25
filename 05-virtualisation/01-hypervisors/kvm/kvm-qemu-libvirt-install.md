@@ -2,9 +2,10 @@
 
 ---
 
-## Ubuntu
+## Debian / Ubuntu
 
 ## apt install
+
 ```
 sudo apt install -y qemu-kvm
 sudo apt install -y libvirt-clients libvirt-daemon-system virt-manager
