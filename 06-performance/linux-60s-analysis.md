@@ -13,12 +13,12 @@
 
 5. `pidstat 1` - View shows `CPU usage` per `process`.
 
-6. `iostat -zv 1` - View `storage device I/O metrics`.
+6. `iostat -zv 1` - View `storage device I/O` metrics.
 
-7. `free -m`
+7. `free -m` - View `available memory in MB`.
 
-8. `sar -n DEV 1`
+8. `sar -n DEV 1` - View `network device` metrics.
 
-9. `sar -n TCP,ETCP`
+9. `sar -n TCP,ETCP` - View `TCP` errors and metrics.
 
-10. `top`
+10. `top` - View an over all status of system performance.
