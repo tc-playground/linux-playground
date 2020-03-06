@@ -236,6 +236,41 @@
 
 ---
 
+## nesnter
+
+* `nsenter -t $PID -a` - Enter the namespaces of the specified process.
+
+1. Start a container running a watch process: `docker run -dt --name debian debian && watch ps aux` 
+
+2. Enter the namespace as root: `sudo nsenter -t $PID-(of-watch) -m -u -i -n -p /bin/bash`
+
+    1. `-t` - The target process of the namespaces to enter. The contexts are taken from `/proc/$PID/ns`.
+
+    2. `-m` - Change to the target processes _mount_ namespace. `/proc/$PID/ns/mnt`.
+
+    3. `-u` - Change to the target processes _uts_  namespace. `/proc/$PID/ns/uts`.
+
+    4. `-i` - Change to the target processes _ipc_  namespace. `/proc/$PID/ns/ipc`.
+
+    5. `-n` - Change to the target processes _network_  namespace. `/proc/$PID/ns/net`.
+
+    6. `-p` - Change to the target processes _process_ namespace. `/proc/$PID/ns/pid`.
+
+3. Check mounts to see overlay file system:
+
+    ```bash
+    root@e104cb7ea9bd:/# mount
+    overlay on / type overlay (rw,relatime,lowerdir=/var/lib/docker/overlay2/l/BG5NFOUZ7RAZEI4XO5IQPZ7IBC:/var/lib/docker/overlay2/l/7UD6MQIAXTM52WN4NUXQ3F7UUO,upperdir=/var/lib/docker/overlay2/7ff0fb8d0e799f51c940bce4f92746480519465625d10476db9beb7dc8a2a6ea/diff,workdir=/var/lib/docker/overlay2/7ff0fb8d0e799f51c940bce4f92746480519465625d10476db9beb7dc8a2a6ea/work,xino=off)
+    ```
+
+---
+
+## Privileged
+
+* If you can see `/dev/sda` inside the container it is probably running in privileged mode.
+
+---
+
 ## References
 
 * [Docker Docs](https://docs.docker.com/)
