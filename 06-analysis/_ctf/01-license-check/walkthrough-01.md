@@ -1,4 +1,6 @@
-## Simple License Check Walkthrough
+## Simple License Check Walkthrough 01
+
+* Crack `licence-check` to get the password.
 
 1. Investigate the binary `main` function:
 
@@ -137,3 +139,9 @@
         (gdb) 
         Access Granted!
         ```
+
+---
+
+## References
+
+* [Walkthrough](https://www.youtube.com/watch?v=VroEiMOJPm8&list=PLhixgUqwRTjxglIswKp9mpkfPNfHkzyeN&index=7&t=0s)
