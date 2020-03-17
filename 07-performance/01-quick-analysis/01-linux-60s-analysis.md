@@ -1,7 +1,12 @@
 # Linux 60s Analysis
 
+## Installation
+
 > `sudo apt install sysstat`
 
+---
+
+## Commands
 
 1. `uptime` - View the `load averages`, which indicate the numbers od processes wanting to run.
 
