@@ -12,7 +12,7 @@
 
 2. `hexdump -C` - View a binary file as hexadecimal.
 
-3. `objdump -d` - Disassembled binary.
+3. `objdump -d` - Disassembled binary. This can be used to find the memory locations for ares of interest.
 
 4. `strings $LEN` - Find all the strings in a binary file that are longer than the specified length.
 
