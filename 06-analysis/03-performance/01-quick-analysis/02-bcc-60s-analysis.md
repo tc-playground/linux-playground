@@ -1,23 +1,5 @@
 # BCC 60s Analysis
 
-## Installation
-
-* __Debian 10__
-
-    ```
-    sudo apt install bpfcc-tools
-    sudo apt install bpftrace
-    ```
-* __Snapd__
-
-    ```bash
-    sudo apt install snapd
-    sudo systemctl start snapd
-    sudo snap install bcc
-    ```
-
----
-
 ## Commands
 
 1. `execsnoop` - Shows new process execution by printing one line of output for every `execve(2)`
@@ -56,4 +38,23 @@ histogram
 11. `profile` - A CPU profiler, a tool you can use to understand which code paths are consuming
 CPU resources. It takes samples of stack traces at timed intervals and prints a summary of unique
 stack traces and a count of their occurrence
+
+---
+
+## BPF / BCC Installation
+
+* __Debian 10__
+
+    ```
+    sudo apt install bpfcc-tools
+    sudo apt install bpftrace
+    ```
+    
+* __Snapd__
+
+    ```bash
+    sudo apt install snapd
+    sudo systemctl start snapd
+    sudo snap install bcc
+    ```
 
