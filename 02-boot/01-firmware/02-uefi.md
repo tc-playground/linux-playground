@@ -24,6 +24,14 @@
 
 ---
 
+## Tools
+
+* [Boot Repair](https://help.ubuntu.com/community/Boot-Repair) - Repair broken boot configurations.
+
+* [rEFInd](http://www.rodsbooks.com/refind) - `Alternative EFI boot manager`. Can be used to fix broken or missing UEFI boot partitions.
+
+---
+
 ## References
 
 * [Wikipedia - UEFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface)
