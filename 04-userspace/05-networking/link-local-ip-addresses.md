@@ -28,6 +28,4 @@
 
 * [Broadcast Domain](https://en.wikipedia.org/wiki/Broadcast_domain) - a logical division of a computer network, in which all nodes can reach each other by broadcast at the data link layer. A broadcast domain can be within the same LAN segment or it can be bridged to other LAN segments. 
 
-* []()
-
 * [Dynamic Configuration of IPv4 Link-Local Addresses - RFC-3027](https://tools.ietf.org/html/rfc3927)
