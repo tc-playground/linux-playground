@@ -24,6 +24,8 @@
 
 2. `ltrace` - Trace _library calls_.
 
+3. `bpftrace` - Trace using `BPF language` expressions on `probes`.
+
 ---
 
 ## Debugger and Disassembler
@@ -31,6 +33,5 @@
 1. `gdb disassemble $FUNCTION` - Debugger and disassembler.
 
 2. `r2` - `redare` reverse-engineering disassembler.
-
-3. 
+ 
 
