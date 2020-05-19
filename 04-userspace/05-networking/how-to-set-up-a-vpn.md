@@ -42,9 +42,6 @@
     ```bash
     sudo openvpn ${path-tpo}/${vpn-name}.ovpn
     ```
-
-
-
 ---
 
 ## References
@@ -53,4 +50,4 @@
 
 * [OpenVPN Debian Installer](https://github.com/Nyr/openvpn-install)
 
-* [https://www.youtube.com/watch?v=IneAGgh9hQg - YouTube](https://www.youtube.com/watch?v=IneAGgh9hQg)
+* [Create Linode VPN - YouTube](https://www.youtube.com/watch?v=IneAGgh9hQg)
