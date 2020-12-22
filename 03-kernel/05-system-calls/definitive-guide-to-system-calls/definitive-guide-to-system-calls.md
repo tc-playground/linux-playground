@@ -55,7 +55,7 @@
 
 * `Model Specific Registers` are `control registers` that have a specific purpose to `control certain features of the CPU`.
 
-    * `rdmsr` - The CPU instruction to `writ`e an MSR. 
+    * `rdmsr` - The CPU instruction to `write` an MSR. 
     
     * `wrmsr` - The CPU instruction to `read` an MSR.
 
